@@ -13,8 +13,11 @@ public class Node {
 	private int visits = 0;
 	private double totalResult = 0;
 	
+	private int score;
+	
 	public Node(DynamicComponent state) {
 		this.state = state;
+		this.score = state.getSize();
 	}
 	
 	public void addParent(HyperEdge parentEdge) { inbound.add(parentEdge); }
@@ -32,5 +35,18 @@ public class Node {
 	public int getVisits() { return visits; }
 	public double getResult() { return totalResult/visits; }
 	
-	public DynamicComponent getState() { return state; } 
+	public DynamicComponent getState() { return state; }
+
+	public int getScore() {	return score; } 
+	
+	public void computeScore() {
+		for (HyperEdge iEdge : outbound) {
+			if(iEdge.getScore() < this.score) {
+				this.score = iEdge.getScore();
+				for (HyperEdge oEdge : outbound) {
+					oEdge.computeScore();
+				}
+			}
+		}
+	}
 }

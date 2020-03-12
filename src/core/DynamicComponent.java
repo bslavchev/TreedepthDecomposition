@@ -59,6 +59,8 @@ public class DynamicComponent {
 		return toReturn;
 	}
 	
+	public int getSize() { return size; }
+	
 	public DynamicComponent copy() {
 		return new DynamicComponent(graph, activeVertices.clone(), this.size);
 	}

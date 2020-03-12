@@ -44,12 +44,20 @@ public class MCTS implements Solver{
 			selected = null;
 			int largestElement = -1;
 			for (Node node : expanded) {
-								
+				int size = node.getState().getSize();
+				if(size > largestElement) {
+					selected = node;
+					largestElement = size;
+				}
 			}
 			
-			
+			backpropagation.backpropagate(selected, rollout.rollout(selected));
 		}
 		
+		return null;
+	}
+	
+	private Decomposition getActionPath() {
 		return null;
 	}
 	
