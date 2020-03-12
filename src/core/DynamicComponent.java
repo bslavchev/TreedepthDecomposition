@@ -13,14 +13,17 @@ public class DynamicComponent {
 	
 	boolean[] activeVertices;
 	
+	int size;
+	
 	//TODO figure out what this should do
 	boolean checked = false;
 	
 	private void setChecked() { this.checked = true; }	
 	
-	private DynamicComponent(StaticGraph graph, boolean[] activeVertices) {
+	private DynamicComponent(StaticGraph graph, boolean[] activeVertices, int size) {
 		this.graph = graph;
 		this.activeVertices = activeVertices;
+		this.size = size;
 	}
 	
 	public DynamicComponent(StaticGraph graph) {
@@ -30,6 +33,8 @@ public class DynamicComponent {
 		Arrays.fill(activeVertices, true);
 		
 		checked = true;
+		
+		size = graph.getV();
 	}
 	
 	public Set<DynamicComponent> disableVertex(int vertex, boolean checkConnectivity){
@@ -44,11 +49,16 @@ public class DynamicComponent {
 			comp.activeVertices[vertex] = false;
 		}
 		
-		return comp.check();
+		if(checkConnectivity)		
+			return comp.check();
+		
+		HashSet<DynamicComponent> toReturn = new HashSet<>();
+		toReturn.add(comp);
+		return toReturn;
 	}
 	
 	public DynamicComponent copy() {
-		return new DynamicComponent(graph, activeVertices.clone());
+		return new DynamicComponent(graph, activeVertices.clone(), this.size);
 	}
 	
 	public Set<DynamicComponent> check(){
@@ -67,16 +77,30 @@ public class DynamicComponent {
 			seen.addAll(discovered);
 			seenComponents.add(discovered);
 		}
+		
+		if(seenComponents.size()==1) {
+			HashSet<DynamicComponent> toReturn = new HashSet<>();
+			toReturn.add(this);
+			
+			System.out.println(System.currentTimeMillis() - start);
+			
+			return toReturn;
+		}
+			 
 				
 		Set<DynamicComponent> components = new HashSet<>();
 		
 		for (Set<Integer> component : seenComponents) {
 			boolean[] newActiveVertices = new boolean[graph.getV()];
 			
-			for (Integer element : component)
-				newActiveVertices[element] = true;				
+			int count = 0;
+			for (Integer element : component) {
+				newActiveVertices[element] = true;
+				count++;
+			}
+				
 			
-			components.add(new DynamicComponent(this.graph, newActiveVertices));
+			components.add(new DynamicComponent(this.graph, newActiveVertices, count));
 		}
 		
 		System.out.println(System.currentTimeMillis() - start);
@@ -114,7 +138,7 @@ public class DynamicComponent {
 	public Set<DynamicComponent> disableVertex(int vertex) {return disableVertex(vertex, true);}
 	
 	public static void main(String[] args) throws Exception {
-		StaticGraph graph = GrGraphReader.readGraph("graphs/h/heur_175.gr");
+		StaticGraph graph = GrGraphReader.readGraph("graphs/e/exact_001.gr");
 		
 		DynamicComponent dc = new DynamicComponent(graph);
 		DynamicComponent dc1;
