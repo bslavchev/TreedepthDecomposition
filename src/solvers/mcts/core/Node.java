@@ -33,4 +33,6 @@ public class Node {
 	
 	public int getVisits() { return visits; }
 	public double getResult() { return totalResult/visits; }
+	
+	public DynamicComponent getState() { return state; } 
 }
