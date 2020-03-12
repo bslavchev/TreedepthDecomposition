@@ -52,6 +52,8 @@ public class DynamicComponent {
 		if(checkConnectivity)		
 			return comp.check();
 		
+		size--;
+		
 		HashSet<DynamicComponent> toReturn = new HashSet<>();
 		toReturn.add(comp);
 		return toReturn;
@@ -80,6 +82,7 @@ public class DynamicComponent {
 		
 		if(seenComponents.size()==1) {
 			HashSet<DynamicComponent> toReturn = new HashSet<>();
+			size--;
 			toReturn.add(this);
 			
 			System.out.println(System.currentTimeMillis() - start);
