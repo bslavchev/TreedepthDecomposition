@@ -13,10 +13,8 @@ public class Node {
 	private int visits = 0;
 	private double totalResult = 0;
 	
-	public Node(DynamicComponent state, HyperEdge parentEdge) {
+	public Node(DynamicComponent state) {
 		this.state = state;
-		
-		addParent(parentEdge);
 	}
 	
 	public void addParent(HyperEdge parentEdge) { inbound.add(parentEdge); }
