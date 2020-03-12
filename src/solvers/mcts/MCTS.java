@@ -4,9 +4,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import core.Decomposition;
+import core.DecompositionNode;
 import core.DynamicComponent;
+import core.StaticGraph;
 import solvers.Solver;
 import solvers.mcts.backpropagation.BackpropagationStrategy;
+import solvers.mcts.core.HyperEdge;
 import solvers.mcts.core.Node;
 import solvers.mcts.expansion.ExpansionStrategy;
 import solvers.mcts.rollout.RolloutStrategy;
@@ -57,8 +60,28 @@ public class MCTS implements Solver{
 		return null;
 	}
 	
-	private Decomposition getActionPath() {
-		return null;
+	private StaticGraph getActionPath() {
+		StaticGraph tree = new StaticGraph(root.getState().getSize());
+		
+		HyperEdge bestEdge = root.selectBest();		
+		tree.setRoot(bestEdge.getAction());
+		
+		recurse(tree,bestEdge);
+		
+		return tree;
+	}
+	
+	private void recurse(StaticGraph graph, HyperEdge edge) {		
+		int action = edge.getAction();
+		
+		for (Node childNode: edge.getTo()) {
+			HyperEdge bestChild = childNode.selectBest();
+			int action2 = bestChild.getAction();
+					
+			graph.addEdge(action,action2);
+			
+			recurse(graph,bestChild);
+		}
 	}
 	
 	

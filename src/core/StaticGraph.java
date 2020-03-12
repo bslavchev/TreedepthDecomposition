@@ -7,6 +7,8 @@ public class StaticGraph {
 	int v;
 	int e;
 	
+	int root;
+	
 	/* TODO: optimization: once the full adjacency list is created, we can convert it into List<int[]> to work with primitive ints
 	 * instead of Integer objects. Saves memory and is less annoying. */
 	 
@@ -44,4 +46,6 @@ public class StaticGraph {
 		
 		System.out.println("ble");
 	}
+	
+	public void setRoot(int root) { this.root = root; }
 }

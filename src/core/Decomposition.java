@@ -1,5 +1,5 @@
 package core;
 
 public class Decomposition {
-	//TODO
+	DecompositionNode root;
 }

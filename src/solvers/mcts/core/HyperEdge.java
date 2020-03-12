@@ -36,4 +36,6 @@ public class HyperEdge {
 			from.computeScore();
 		}			
 	}
+
+	public int getAction() { return action; }
 }

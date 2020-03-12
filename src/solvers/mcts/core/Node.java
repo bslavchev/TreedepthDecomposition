@@ -1,6 +1,8 @@
 package solvers.mcts.core;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import core.DynamicComponent;
@@ -48,5 +50,17 @@ public class Node {
 				}
 			}
 		}
+	}
+	
+	public HyperEdge selectBest() {
+		List<HyperEdge> best = new ArrayList<>();
+		
+		for (HyperEdge hyperEdge : outbound)
+			if(hyperEdge.getScore() == this.score)
+				best.add(hyperEdge);
+		
+		int randomIndex = (int) (Math.random() * best.size());
+		
+		return best.get(randomIndex);
 	}
 }
