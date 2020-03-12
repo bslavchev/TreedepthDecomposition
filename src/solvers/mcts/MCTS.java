@@ -1,24 +1,19 @@
 package solvers.mcts;
 
-import java.util.Set;
-
-import core.Decomposition;
 import core.DynamicComponent;
 import solvers.Solver;
+import solvers.mcts.backpropagation.BackpropagationStrategy;
+import solvers.mcts.expansion.ExpansionStrategy;
+import solvers.mcts.rollout.RolloutStrategy;
+import solvers.mcts.selection.SelectionStrategy;
 
-public class MCTS implements Solver{
+public abstract class MCTS implements Solver{
+	
+	SelectionStrategy selection;
+	ExpansionStrategy expansion;
+	RolloutStrategy rollout;
+	BackpropagationStrategy backpropagation;
 	
 	DynamicComponent dc;
 	int timeLimit = 30;
-	
-	public MCTS(DynamicComponent dc, int timeLimit) {
-		this.dc = dc;
-		this.timeLimit = timeLimit;
-	}
-
-	@Override
-	public Decomposition getSolution() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
