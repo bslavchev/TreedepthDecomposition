@@ -1,7 +1,7 @@
 package solvers;
 
-import core.Decomposition;
+import core.StaticGraph;
 
 public interface Solver {
-	public Decomposition getSolution();
+	public StaticGraph getSolution();
 }

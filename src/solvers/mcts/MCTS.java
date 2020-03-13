@@ -3,8 +3,6 @@ package solvers.mcts;
 import java.util.HashSet;
 import java.util.Set;
 
-import core.Decomposition;
-import core.DecompositionNode;
 import core.DynamicComponent;
 import core.StaticGraph;
 import solvers.Solver;
@@ -37,7 +35,7 @@ public class MCTS implements Solver{
 		this.timeLimit = timeLimit;				
 	}
 
-	public Decomposition getSolution() {
+	public StaticGraph getSolution() {
 		long startTime = System.currentTimeMillis();
 		
 		while(startTime + timeLimit*1000 < System.currentTimeMillis()) {
@@ -57,10 +55,11 @@ public class MCTS implements Solver{
 			backpropagation.backpropagate(selected, rollout.rollout(selected));
 		}
 		
-		return null;
+		return getActionPath();
 	}
 	
 	private StaticGraph getActionPath() {
+		//TODO think very long and hard about whether this is correct
 		StaticGraph tree = new StaticGraph(root.getState().getSize());
 		
 		HyperEdge bestEdge = root.selectBest();		
@@ -82,7 +81,5 @@ public class MCTS implements Solver{
 			
 			recurse(graph,bestChild);
 		}
-	}
-	
-	
+	}	
 }
