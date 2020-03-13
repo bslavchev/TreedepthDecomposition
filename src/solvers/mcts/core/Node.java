@@ -9,33 +9,55 @@ import core.DynamicComponent;
 
 public class Node {
 	private DynamicComponent state;
-	private Set<HyperEdge> inbound = new HashSet<HyperEdge>();
+	private HyperEdge inbound;
 	private Set<HyperEdge> outbound = new HashSet<HyperEdge>();
-	
-	private int visits = 0;
-	private double totalResult = 0;
+	private List<Integer> unexpandedActions = new ArrayList<Integer>();
 	
 	private int score;
+	
+	private int visits;
 	
 	public Node(DynamicComponent state) {
 		this.state = state;
 		this.score = state.getSize();
+		
+		for(int i=0; i < state.getSize(); i++) {
+			boolean[] activeVertices = state.getActiveVertices();
+			if(activeVertices[i])
+				unexpandedActions.add(i);
+		}
 	}
 	
-	public void addParent(HyperEdge parentEdge) { inbound.add(parentEdge); }
-	public Set<HyperEdge> getParents() { return inbound; }
+	public Set<Node> applyAction(int i){
+		Set<DynamicComponent> dcs = state.disableVertex(i);
+		
+		Set<Node> nodes = new HashSet<>();
+		
+		for (DynamicComponent dc : dcs) {
+			Node newNode = new Node(dc);			
+			nodes.add(newNode);
+		}
+		
+		HyperEdge newEdge = new HyperEdge(i, this, nodes);
+		
+		this.addChild(newEdge);
+		
+		for (Node node : nodes)
+			node.addParent(newEdge);
+		
+		return nodes;
+	}
+	
+	public List<Integer> getUnexpandedActions() { return unexpandedActions; }
+	
+	public void expandAction(int i) { unexpandedActions.remove(i); }
+	
+	public void addParent(HyperEdge parentEdge) { inbound = parentEdge; }
+	public HyperEdge getParent() { return inbound; }
 	
 	
 	public void addChild(HyperEdge childEdge) { outbound.add(childEdge); }
 	public Set<HyperEdge> getChildren() { return outbound; } 
-	
-	public void addVisit(double result) {
-		visits++;
-		totalResult += result;
-	}
-	
-	public int getVisits() { return visits; }
-	public double getResult() { return totalResult/visits; }
 	
 	public DynamicComponent getState() { return state; }
 
@@ -54,13 +76,28 @@ public class Node {
 	
 	public HyperEdge selectBest() {
 		List<HyperEdge> best = new ArrayList<>();
+		int bestScore = Integer.MAX_VALUE;
 		
-		for (HyperEdge hyperEdge : outbound)
-			if(hyperEdge.getScore() == this.score)
+		for (HyperEdge hyperEdge : outbound) {
+			int score = hyperEdge.getScore();
+			if(score < bestScore) {
+				bestScore = score;
+				best = new ArrayList<>();
+			}
+			
+			if(score == bestScore)
 				best.add(hyperEdge);
+		}
+		
+	
+		if(best.size() == 0)
+			return null;
 		
 		int randomIndex = (int) (Math.random() * best.size());
 		
 		return best.get(randomIndex);
 	}
+	
+	public void addVisit() { visits++; }
+	public int getVisits() { return visits;}
 }

@@ -1,19 +1,29 @@
 package solvers.mcts;
 
+import java.util.Random;
+
 import core.DynamicComponent;
 import core.StaticGraph;
 import solvers.Solver;
 import solvers.mcts.core.HyperEdge;
 import solvers.mcts.core.Node;
 import solvers.mcts.strategies.backpropagation.BackpropagationStrategy;
+import solvers.mcts.strategies.backpropagation.SimpleBackpropagationStrategy;
 import solvers.mcts.strategies.rollout.RolloutStrategy;
+import solvers.mcts.strategies.rollout.SimpleRolloutStrategy;
+import solvers.mcts.strategies.tree.SimpleTreeStrategy;
 import solvers.mcts.strategies.tree.TreeStrategy;
+import util.GrGraphReader;
 
 public class MCTS implements Solver{
 	
 	//TODO: convert from tree to DAG
 	
 	int timeLimit = 30;
+	
+	public static final double C = Math.sqrt(2);
+	
+	public static final Random random = new Random();
 	
 	TreeStrategy tree;
 	RolloutStrategy rollout;
@@ -36,7 +46,9 @@ public class MCTS implements Solver{
 	public StaticGraph getSolution() {
 		long startTime = System.currentTimeMillis();
 		
-		while(startTime + timeLimit*1000 < System.currentTimeMillis()) {
+		long endTime = startTime + timeLimit*1000;
+		
+		while(endTime > System.currentTimeMillis()) {
 			Node selected = tree.select(root);
 			
 			backpropagation.backpropagate(selected, rollout.rollout(selected));
@@ -62,6 +74,10 @@ public class MCTS implements Solver{
 		
 		for (Node childNode: edge.getTo()) {
 			HyperEdge bestChild = childNode.selectBest();
+			
+			if(bestChild == null)
+				continue;
+			
 			int action2 = bestChild.getAction();
 					
 			graph.addEdge(action,action2);
@@ -69,4 +85,14 @@ public class MCTS implements Solver{
 			recurse(graph,bestChild);
 		}
 	}	
+	
+	public static void main(String[] args) throws Exception {
+		StaticGraph graph = GrGraphReader.readGraph("graphs/e/exact_001.gr");
+		DynamicComponent dc = new DynamicComponent(graph);
+		
+		MCTS mcts = new MCTS(dc, 5,new SimpleTreeStrategy(), new SimpleRolloutStrategy(), new SimpleBackpropagationStrategy());
+		mcts.getSolution();
+		
+		System.out.println("mcts done");
+	}
 }

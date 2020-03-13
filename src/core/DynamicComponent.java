@@ -26,6 +26,8 @@ public class DynamicComponent {
 		this.size = size;
 	}
 	
+	public boolean[] getActiveVertices() { return activeVertices; }
+	
 	public DynamicComponent(StaticGraph graph) {
 		this.graph = graph;
 		
@@ -87,7 +89,7 @@ public class DynamicComponent {
 			size--;
 			toReturn.add(this);
 			
-			System.out.println(System.currentTimeMillis() - start);
+//			System.out.println(System.currentTimeMillis() - start);
 			
 			return toReturn;
 		}
@@ -108,7 +110,7 @@ public class DynamicComponent {
 			components.add(new DynamicComponent(this.graph, newActiveVertices, count));
 		}
 		
-		System.out.println(System.currentTimeMillis() - start);
+//		System.out.println(System.currentTimeMillis() - start);
 		
 		return components;
 	}

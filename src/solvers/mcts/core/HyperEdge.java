@@ -1,7 +1,8 @@
 package solvers.mcts.core;
 
-import java.util.HashSet;
 import java.util.Set;
+
+import solvers.mcts.MCTS;
 
 public class HyperEdge {
 	Node from;
@@ -9,12 +10,23 @@ public class HyperEdge {
 	int action;
 	int score = Integer.MAX_VALUE;
 	
+	private int visits = 0;
+	private double totalResult = 0;
+	
 	public HyperEdge(int action, Node from, Set<Node> to) {
 		this.action = action;
 		this.from = from;
 		this.to = to;
 		
 		computeScore();
+	}
+	
+	public double computeUCB1() {
+		if(visits == 0) 
+			return Double.MAX_VALUE;
+		
+		int N = from.getVisits();
+		return (totalResult/visits + MCTS.C * Math.sqrt(Math.log(N)/visits));
 	}
 	
 	public Node getFrom() { return from; }
@@ -38,4 +50,12 @@ public class HyperEdge {
 	}
 
 	public int getAction() { return action; }
+	
+	public void addVisit(double result) {
+		visits++;
+		totalResult += result;
+	}
+	
+	public int getVisits() { return visits; }
+	public double getResult() { return totalResult/visits; }
 }
