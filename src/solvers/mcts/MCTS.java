@@ -44,17 +44,7 @@ public class MCTS implements Solver{
 		
 		while(startTime + timeLimit*1000 < System.currentTimeMillis()) {
 			Node selected = selection.select(rootAsSet);			
-			Set<Node> expanded = expansion.expand(selected);
-			
-			selected = null;
-			int largestElement = -1;
-			for (Node node : expanded) {
-				int size = node.getState().getSize();
-				if(size > largestElement) {
-					selected = node;
-					largestElement = size;
-				}
-			}
+			Node expanded = expansion.expand(selected);
 			
 			backpropagation.backpropagate(selected, rollout.rollout(selected));
 		}
