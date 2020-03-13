@@ -9,33 +9,30 @@ import solvers.Solver;
 import solvers.mcts.backpropagation.BackpropagationStrategy;
 import solvers.mcts.core.HyperEdge;
 import solvers.mcts.core.Node;
-import solvers.mcts.expansion.ExpansionStrategy;
 import solvers.mcts.rollout.RolloutStrategy;
-import solvers.mcts.selection.SelectionStrategy;
+import solvers.mcts.tree.TreeStrategy;
 
 public class MCTS implements Solver{
 	
+	//TODO: convert from tree to DAG
+	
 	int timeLimit = 30;
 	
-	SelectionStrategy selection;
-	ExpansionStrategy expansion;
+	TreeStrategy tree;
 	RolloutStrategy rollout;
 	BackpropagationStrategy backpropagation;
 	
 	Node root;
-	Set<Node> rootAsSet = new HashSet<Node>();
 	
-	public MCTS(DynamicComponent dc, SelectionStrategy selection, ExpansionStrategy expansion, RolloutStrategy rollout, BackpropagationStrategy backpropagation) {
-		this.selection = selection;
-		this.expansion = expansion;
+	public MCTS(DynamicComponent dc, TreeStrategy tree, RolloutStrategy rollout, BackpropagationStrategy backpropagation) {
+		this.tree = tree;
 		this.rollout = rollout;
 		this.backpropagation = backpropagation;
 		this.root = new Node(dc);
-		this.rootAsSet.add(root);
 	}
 	
-	public MCTS(DynamicComponent dc, int timeLimit, SelectionStrategy selection, ExpansionStrategy expansion, RolloutStrategy rollout, BackpropagationStrategy backpropagation) {
-		this(dc, selection, expansion, rollout, backpropagation);
+	public MCTS(DynamicComponent dc, int timeLimit, TreeStrategy tree, RolloutStrategy rollout, BackpropagationStrategy backpropagation) {
+		this(dc, tree, rollout, backpropagation);
 		this.timeLimit = timeLimit;				
 	}
 
@@ -43,8 +40,7 @@ public class MCTS implements Solver{
 		long startTime = System.currentTimeMillis();
 		
 		while(startTime + timeLimit*1000 < System.currentTimeMillis()) {
-			Node selected = selection.select(rootAsSet);			
-			Node expanded = expansion.expand(selected);
+			Node selected = tree.select(root);
 			
 			backpropagation.backpropagate(selected, rollout.rollout(selected));
 		}
