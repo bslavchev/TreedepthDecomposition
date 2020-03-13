@@ -1,16 +1,13 @@
 package solvers.mcts;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import core.DynamicComponent;
 import core.StaticGraph;
 import solvers.Solver;
-import solvers.mcts.backpropagation.BackpropagationStrategy;
 import solvers.mcts.core.HyperEdge;
 import solvers.mcts.core.Node;
-import solvers.mcts.rollout.RolloutStrategy;
-import solvers.mcts.tree.TreeStrategy;
+import solvers.mcts.strategies.backpropagation.BackpropagationStrategy;
+import solvers.mcts.strategies.rollout.RolloutStrategy;
+import solvers.mcts.strategies.tree.TreeStrategy;
 
 public class MCTS implements Solver{
 	

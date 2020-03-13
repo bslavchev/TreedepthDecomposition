@@ -1,4 +1,4 @@
-package solvers.mcts.rollout;
+package solvers.mcts.strategies.rollout;
 
 import solvers.mcts.core.Node;
 

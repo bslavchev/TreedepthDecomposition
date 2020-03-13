@@ -1,6 +1,4 @@
-package solvers.mcts.tree;
-
-import java.util.Set;
+package solvers.mcts.strategies.tree;
 
 import solvers.mcts.core.Node;
 

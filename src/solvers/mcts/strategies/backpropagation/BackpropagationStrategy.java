@@ -1,4 +1,4 @@
-package solvers.mcts.backpropagation;
+package solvers.mcts.strategies.backpropagation;
 
 import solvers.mcts.core.Node;
 
