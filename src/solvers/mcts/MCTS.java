@@ -25,13 +25,17 @@ public class MCTS implements Solver{
 	Node root;
 	Set<Node> rootAsSet = new HashSet<Node>();
 	
-	public MCTS(DynamicComponent dc) {
+	public MCTS(DynamicComponent dc, SelectionStrategy selection, ExpansionStrategy expansion, RolloutStrategy rollout, BackpropagationStrategy backpropagation) {
+		this.selection = selection;
+		this.expansion = expansion;
+		this.rollout = rollout;
+		this.backpropagation = backpropagation;
 		this.root = new Node(dc);
 		this.rootAsSet.add(root);
 	}
 	
-	public MCTS(DynamicComponent dc, int timeLimit) {
-		this(dc);
+	public MCTS(DynamicComponent dc, int timeLimit, SelectionStrategy selection, ExpansionStrategy expansion, RolloutStrategy rollout, BackpropagationStrategy backpropagation) {
+		this(dc, selection, expansion, rollout, backpropagation);
 		this.timeLimit = timeLimit;				
 	}
 
