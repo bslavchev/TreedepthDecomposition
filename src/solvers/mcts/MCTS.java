@@ -48,11 +48,17 @@ public class MCTS implements Solver{
 		
 		long endTime = startTime + timeLimit*1000;
 		
+		int iterations = 0;
+		
 		while(endTime > System.currentTimeMillis()) {
 			Node selected = tree.select(root);
 			
 			backpropagation.backpropagate(selected, rollout.rollout(selected));
+			
+			iterations++;
 		}
+		
+		System.out.println("iterations: " + iterations);
 		
 		return getActionPath();
 	}
