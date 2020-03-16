@@ -15,7 +15,9 @@ public class SimpleRolloutStrategy implements RolloutStrategy {
 		
 		List<Integer> potentialActions = from.getUnexpandedActions();
 		
-		for(int i = 0; i < potentialActions.size()/2; i++) {
+		int actionsToTake = (int) Math.ceil(potentialActions.size()/2);
+		
+		for(int i = 0; i < actionsToTake; i++) {
 			int selectedIndex = MCTS.random.nextInt(potentialActions.size());		
 			//TODO: check all places where I remove Integer from a list. Does it remove the element, or the element at the index?
 			
@@ -33,7 +35,7 @@ public class SimpleRolloutStrategy implements RolloutStrategy {
 			if(dc.getSize() > biggest)
 				biggest = dc.getSize();
 		
-		return biggest;
+		return (biggest+actionsToTake)/(from.getState().getSize());
 	}
 
 }

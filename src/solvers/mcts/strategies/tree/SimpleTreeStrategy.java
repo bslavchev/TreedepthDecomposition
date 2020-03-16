@@ -15,23 +15,32 @@ public class SimpleTreeStrategy implements TreeStrategy {
 	public Node select(Node from) {
 		Set<HyperEdge> children = from.getChildren();
 		
-		if(children.size() < from.getState().getSize())
-			expand(from);
-			
-		
 		Set<HyperEdge> bestEdges = new HashSet<HyperEdge>();
-		double bestScore = -1;
 		
-		for (HyperEdge hyperEdge : children) {
-			double ucb1 = hyperEdge.computeUCB1();			
+		boolean expansion = false;
+		
+		if(from.getState().getIDsOfActiveVertices().size() == 1)
+			System.out.println('e');
+		
+		if(children.size() < from.getState().getSize()) {
+			bestEdges.add(expand(from));
+			expansion = true;
+		}	
+				
+		if(bestEdges.size() == 0) {		
+			double bestScore = -1;
 			
-			if(Double.compare(ucb1, bestScore) > 0) {
-				bestScore = ucb1;
-				bestEdges = new HashSet<HyperEdge>();				
+			for (HyperEdge hyperEdge : children) {
+				double ucb1 = hyperEdge.computeUCB1();			
+				
+				if(Double.compare(ucb1, bestScore) > 0) {
+					bestScore = ucb1;
+					bestEdges = new HashSet<HyperEdge>();				
+				}
+				
+				if(Double.compare(ucb1, bestScore) == 0)
+					bestEdges.add(hyperEdge);
 			}
-			
-			if(Double.compare(ucb1, bestScore) == 0)
-				bestEdges.add(hyperEdge);
 		}
 		
 		List<Node> worstNodes = new ArrayList<>();
@@ -51,13 +60,22 @@ public class SimpleTreeStrategy implements TreeStrategy {
 		
 		int randomIndex = MCTS.random.nextInt(worstNodes.size());
 		
-		return worstNodes.get(randomIndex);
+		if(expansion)
+			return worstNodes.get(randomIndex);		
+
+		return select(worstNodes.get(randomIndex));
 	}
 
 	@Override
-	public Set<Node> expand(Node from) {
+	public HyperEdge expand(Node from) {
 		List<Integer> possibilities = from.getUnexpandedActions();
+		
+		if(possibilities.size() ==0)
+			System.out.println('e');
+		
 		Integer action = possibilities.get(MCTS.random.nextInt(possibilities.size()));
+		
+		from.expandAction(action);
 		
 		return from.applyAction(action);
 	}

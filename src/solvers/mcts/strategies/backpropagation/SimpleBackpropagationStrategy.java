@@ -7,7 +7,10 @@ public class SimpleBackpropagationStrategy implements BackpropagationStrategy {
 
 	@Override
 	public void backpropagate(Node from, int result) {
+		from.addVisit();
+		
 		HyperEdge parent = from.getParent();
+		
 		while(parent != null) {			
 			parent.addVisit(result);
 			Node parentNode = parent.getFrom();

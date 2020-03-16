@@ -1,5 +1,6 @@
 package core;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -24,6 +25,18 @@ public class DynamicComponent {
 		this.graph = graph;
 		this.activeVertices = activeVertices;
 		this.size = size;
+	}
+	
+	public StaticGraph getGraph() { return graph; } 
+	
+	public List<Integer> getIDsOfActiveVertices(){
+		ArrayList<Integer> list = new ArrayList<>();
+		
+		for (int i = 0; i < activeVertices.length; i++)
+			if(activeVertices[i])
+				list.add(i);
+		
+		return list;
 	}
 	
 	public boolean[] getActiveVertices() { return activeVertices; }
@@ -93,8 +106,7 @@ public class DynamicComponent {
 			
 			return toReturn;
 		}
-			 
-				
+						
 		Set<DynamicComponent> components = new HashSet<>();
 		
 		for (Set<Integer> component : seenComponents) {

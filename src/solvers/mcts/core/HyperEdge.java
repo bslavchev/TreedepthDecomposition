@@ -34,6 +34,7 @@ public class HyperEdge {
 	
 	public int getScore() { return score; } 
 	public void computeScore() {
+		//TODO check this
 		int currentWorst = -1;
 		
 		for (Node node : to) {
@@ -58,4 +59,8 @@ public class HyperEdge {
 	
 	public int getVisits() { return visits; }
 	public double getResult() { return totalResult/visits; }
+	
+	public String toString() {
+		return ("HyperEdge(" + action + " c" + to.size() + " v" + visits + " s" + score + " tr" +totalResult + ")");
+	}
 }

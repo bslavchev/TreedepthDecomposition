@@ -3,16 +3,15 @@ package core;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StaticGraph {
+public class StaticDirectedGraph {
 	int v;
 	int e;
 	
-	/* TODO: optimization: once the full adjacency list is created, we can convert it into List<int[]> to work with primitive ints
-	 * instead of Integer objects. Saves memory and is less annoying. */
+	int root;
 	 
 	List<List<Integer>> adjacencyList;
 	
-	public StaticGraph(int v) {
+	public StaticDirectedGraph(int v) {
 		this.v = v;
 		
 		adjacencyList = new ArrayList<>();
@@ -26,15 +25,12 @@ public class StaticGraph {
 	public int getE() {return e;}
 	
 	public void addEdge(int u, int v) {
-		adjacencyList.get(u).add(v);
 		adjacencyList.get(v).add(u);
 		
 		e++;
 	}
 	
 	public List<Integer> getNeighbors(int v){ return adjacencyList.get(v); }
-	
-	public void addEdge(int[] uv) {	this.addEdge(uv[0],uv[1]); }
 	
 	public static void main(String args[]) {
 		StaticGraph graph = new StaticGraph(10);
@@ -45,7 +41,22 @@ public class StaticGraph {
 		System.out.println("ble");
 	}
 	
+	public String printAsSolution() {
+		String solutionString = new String(getDepth() + "\n");
+		
+		for (int i = 0; i < v; i++) {
+			if(i==root) {
+				solutionString += (0 + "\n");
+				continue;
+			}
+			
+			solutionString += (adjacencyList.get(i).get(0) + "\n");
+		}
+		
+		return solutionString;
+	}
+	
 	public int getDepth() { return -1; } //TODO
 	
-	
+	public void setRoot(int root) { this.root = root; }
 }

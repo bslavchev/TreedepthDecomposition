@@ -11,7 +11,7 @@ public class Node {
 	private DynamicComponent state;
 	private HyperEdge inbound;
 	private Set<HyperEdge> outbound = new HashSet<HyperEdge>();
-	private List<Integer> unexpandedActions = new ArrayList<Integer>();
+	private List<Integer> unexpandedActions;
 	
 	private int score;
 	
@@ -21,14 +21,10 @@ public class Node {
 		this.state = state;
 		this.score = state.getSize();
 		
-		for(int i=0; i < state.getSize(); i++) {
-			boolean[] activeVertices = state.getActiveVertices();
-			if(activeVertices[i])
-				unexpandedActions.add(i);
-		}
+		this.unexpandedActions = state.getIDsOfActiveVertices();
 	}
 	
-	public Set<Node> applyAction(int i){
+	public HyperEdge applyAction(int i){
 		Set<DynamicComponent> dcs = state.disableVertex(i);
 		
 		Set<Node> nodes = new HashSet<>();
@@ -45,12 +41,12 @@ public class Node {
 		for (Node node : nodes)
 			node.addParent(newEdge);
 		
-		return nodes;
+		return newEdge;
 	}
 	
 	public List<Integer> getUnexpandedActions() { return unexpandedActions; }
 	
-	public void expandAction(int i) { unexpandedActions.remove(i); }
+	public void expandAction(int i) { unexpandedActions.remove(new Integer(i)); }
 	
 	public void addParent(HyperEdge parentEdge) { inbound = parentEdge; }
 	public HyperEdge getParent() { return inbound; }
@@ -100,4 +96,8 @@ public class Node {
 	
 	public void addVisit() { visits++; }
 	public int getVisits() { return visits;}
+	
+	public String toString() {
+		return ("Node(" + state.getIDsOfActiveVertices() + " v" + visits + " s" + score + ")");
+	}
 }

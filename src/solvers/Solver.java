@@ -1,7 +1,7 @@
 package solvers;
 
-import core.StaticGraph;
+import core.StaticDirectedGraph;
 
 public interface Solver {
-	public StaticGraph getSolution();
+	public StaticDirectedGraph getSolution();
 }
