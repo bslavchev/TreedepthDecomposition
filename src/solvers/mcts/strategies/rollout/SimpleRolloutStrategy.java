@@ -1,6 +1,6 @@
 package solvers.mcts.strategies.rollout;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Set;
 
 import core.DynamicComponent;
@@ -13,7 +13,7 @@ public class SimpleRolloutStrategy implements RolloutStrategy {
 	public int rollout(Node from) {
 		DynamicComponent state = from.getState().copy();
 		
-		List<Integer> potentialActions = from.getUnexpandedActions();
+		ArrayList<Integer> potentialActions = (ArrayList<Integer>) from.getUnexpandedActions().clone();
 		
 		int actionsToTake = (int) Math.ceil(potentialActions.size()/2);
 		

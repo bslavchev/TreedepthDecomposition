@@ -58,6 +58,9 @@ public class SimpleTreeStrategy implements TreeStrategy {
 			}
 		}
 		
+		if(worstNodes.size() ==0)
+			System.out.println('e');
+		
 		int randomIndex = MCTS.random.nextInt(worstNodes.size());
 		
 		if(expansion)

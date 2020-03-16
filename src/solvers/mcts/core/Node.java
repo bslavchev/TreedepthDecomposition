@@ -11,7 +11,7 @@ public class Node {
 	private DynamicComponent state;
 	private HyperEdge inbound;
 	private Set<HyperEdge> outbound = new HashSet<HyperEdge>();
-	private List<Integer> unexpandedActions;
+	private ArrayList<Integer> unexpandedActions;
 	
 	private int score;
 	
@@ -44,7 +44,7 @@ public class Node {
 		return newEdge;
 	}
 	
-	public List<Integer> getUnexpandedActions() { return unexpandedActions; }
+	public ArrayList<Integer> getUnexpandedActions() { return unexpandedActions; }
 	
 	public void expandAction(int i) { unexpandedActions.remove(new Integer(i)); }
 	

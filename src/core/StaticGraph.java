@@ -45,7 +45,4 @@ public class StaticGraph {
 		System.out.println("ble");
 	}
 	
-	public int getDepth() { return -1; } //TODO
-	
-	
 }
